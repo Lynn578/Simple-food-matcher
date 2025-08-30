@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recipe Recommender</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            color: #333;
+            line-height: 1.6;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        header {
+            text-align: center;
+            padding: 30px 0;
+        }
+        
+        header h1 {
+            font-size: 2.8rem;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+        
+        header p {
+            font-size: 1.2rem;
+            color: #7f8c8d;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        
+        .search-section {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            margin-bottom: 40px;
+        }
+        
+        .search-form {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        
+        .input-group label {
+            font-weight: 600;
+            color: #2c3e50;
+        }
+        
+        .input-group input {
+            padding: 15px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+        
+        .input-group input:focus {
+            border-color: #3498db;
+            outline: none;
+        }
+        
+        .input-group input::placeholder {
+            color: #aaa;
+        }
+        
+        button {
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 15px 25px;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        
+        button:hover {
+            background: #2980b9;
+        }
+        
+        .recipes-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 30px;
+            margin-bottom: 50px;
+        }
+        
+        .recipe-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+            transition: transform 0.3s;
+        }
+        
+        .recipe-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .recipe-image {
+            height: 200px;
+            background: linear-gradient(120deg, #a1c4fd 0%, #c2e9fb 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+        }
+        
+        .recipe-content {
+            padding: 25px;
+        }
+        
+        .recipe-title {
+            font-size: 1.4rem;
+            color: #2c3e50;
+            margin-bottom: 15px;
+        }
+        
+        .recipe-ingredients {
+            margin-bottom: 20px;
+        }
+        
+        .recipe-ingredients h3 {
+            font-size: 1.1rem;
+            color: #7f8c8d;
+            margin-bottom: 10px;
+        }
+        
+        .ingredients-list {
+            list-style-type: none;
+        }
+        
+        .ingredients-list li {
+            padding: 5px 0;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            align-items: center;
+        }
+        
+        .ingredients-list li:before {
+            content: "•";
+            color: #3498db;
+            font-weight: bold;
+            display: inline-block;
+            width: 1em;
+            margin-right: 5px;
+        }
+        
+        .recipe-instructions {
+            margin-bottom: 20px;
+        }
+        
+        .recipe-instructions h3 {
+            font-size: 1.1rem;
+            color: #7f8c8d;
+            margin-bottom: 10px;
+        }
+        
+        .recipe-meta {
+            display: flex;
+            justify-content: space-between;
+            color: #7f8c8d;
+            font-size: 0.9rem;
+            border-top: 1px solid #eee;
+            padding-top: 15px;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 40px;
+            font-size: 1.2rem;
+            color: #7f8c8d;
+            display: none;
+        }
+        
+        .loading i {
+            animation: spin 1.5s linear infinite;
+            margin-right: 10px;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        footer {
+            text-align: center;
+            padding: 20px;
+            color: #7f8c8d;
+            font-size: 0.9rem;
+            margin-top: 30px;
+        }
+        
+        @media (max-width: 768px) {
+            .recipes-container {
+                grid-template-columns: 1fr;
+            }
+            
+            header h1 {
+                font-size: 2.2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Recipe Recommender</h1>
+            <p>Enter ingredients you have, and we'll recommend delicious recipes you can make!</p>
+        </header>
+        
+        <section class="search-section">
+            <form class="search-form" id="recipe-form">
+                <div class="input-group">
+                    <label for="ingredients">Enter Ingredients (comma separated):</label>
+                    <input type="text" id="ingredients" placeholder="e.g., chicken, tomatoes, onions, garlic" required>
+                </div>
+                <button type="submit">Find Recipes</button>
+            </form>
+        </section>
+        
+        <div class="loading" id="loading">
+            <i class="fas fa-spinner"></i> Finding the best recipes for you...
+        </div>
+        
+        <div class="recipes-container" id="recipes-container">
+            <!-- Recipe cards will be generated here -->
+        </div>
+        
+        <footer>
+            <p>Recipe Recommender &copy; 2023 | Powered by OpenAI API</p>
+        </footer>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const recipeForm = document.getElementById('recipe-form');
+            const recipesContainer = document.getElementById('recipes-container');
+            const loadingElement = document.getElementById('loading');
+            
+            // Sample recipe data for demonstration
+            const sampleRecipes = [
+                {
+                    title: "Classic Chicken Tomato Pasta",
+                    ingredients: ["chicken", "tomatoes", "pasta", "garlic", "olive oil", "basil"],
+                    instructions: "1. Cook pasta according to package instructions. 2. Season chicken and cook until golden. 3. Add chopped tomatoes and garlic, simmer for 10 minutes. 4. Toss with pasta and garnish with basil.",
+                    cookingTime: "25 min",
+                    difficulty: "Easy"
+                },
+                {
+                    title: "Fresh Tomato Salad",
+                    ingredients: ["tomatoes", "onions", "olive oil", "vinegar", "salt", "pepper"],
+                    instructions: "1. Slice tomatoes and onions. 2. Arrange on a plate. 3. Drizzle with olive oil and vinegar. 4. Season with salt and pepper to taste.",
+                    cookingTime: "10 min",
+                    difficulty: "Very Easy"
+                },
+                {
+                    title: "Garlic Herb Chicken",
+                    ingredients: ["chicken", "garlic", "herbs", "lemon juice", "olive oil"],
+                    instructions: "1. Marinate chicken with garlic, herbs, lemon juice, and olive oil for 30 minutes. 2. Grill chicken until cooked through. 3. Serve with your favorite side dish.",
+                    cookingTime: "40 min",
+                    difficulty: "Medium"
+                }
+            ];
+            
+            // Function to display recipes
+            function displayRecipes(recipes) {
+                recipesContainer.innerHTML = '';
+                
+                recipes.forEach(recipe => {
+                    const recipeCard = document.createElement('div');
+                    recipeCard.className = 'recipe-card';
+                    
+                    const ingredientsList = recipe.ingredients.map(ingredient => 
+                        `<li>${ingredient}</li>`
+                    ).join('');
+                    
+                    recipeCard.innerHTML = `
+                        <div class="recipe-image">
+                            <i class="fas fa-utensils"></i>
+                        </div>
+                        <div class="recipe-content">
+                            <h2 class="recipe-title">${recipe.title}</h2>
+                            <div class="recipe-ingredients">
+                                <h3>Ingredients</h3>
+                                <ul class="ingredients-list">
+                                    ${ingredientsList}
+                                </ul>
+                            </div>
+                            <div class="recipe-instructions">
+                                <h3>Instructions</h3>
+                                <p>${recipe.instructions}</p>
+                            </div>
+                            <div class="recipe-meta">
+                                <span><i class="far fa-clock"></i> ${recipe.cookingTime}</span>
+                                <span>Difficulty: ${recipe.difficulty}</span>
+                            </div>
+                        </div>
+                    `;
+                    
+                    recipesContainer.appendChild(recipeCard);
+                });
+            }
+            
+            // Show sample recipes on page load
+            displayRecipes(sampleRecipes);
+            
+            // Handle form submission
+            recipeForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const ingredientsInput = document.getElementById('ingredients').value;
+                
+                if (ingredientsInput.trim() === '') {
+                    alert('Please enter at least one ingredient');
+                    return;
+                }
+                
+                // Show loading state
+                loadingElement.style.display = 'block';
+                recipesContainer.innerHTML = '';
+                
+                // Simulate API call delay
+                setTimeout(() => {
+                    // In a real application, this would be an API call to the backend
+                    // For demonstration, we're using sample data
+                    
+                    // Hide loading state
+                    loadingElement.style.display = 'none';
+                    
+                    // Display recipes based on input (in a real app, this would come from the API)
+                    displayRecipes(sampleRecipes);
+                    
+                    // Scroll to results
+                    recipesContainer.scrollIntoView({ behavior: 'smooth' });
+                    
+                }, 1500);
+            });
+        });
+    </script>
+</body>
+</html>
