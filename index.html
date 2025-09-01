@@ -3,400 +3,1306 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Recipe Recommender</title>
+    <title>Kenya Budget Meal Planner</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
+        :root {
+            --primary: #4CAF50;
+            --primary-dark: #388E3C;
+            --secondary: #FF9800;
+            --secondary-dark: #F57C00;
+            --accent: #2196F3;
+            --light: #F5F5F5;
+            --dark: #333;
+            --gray: #757575;
+            --light-gray: #E0E0E0;
+            --white: #FFFFFF;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s ease;
+        }
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
-        
+
         body {
-            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-            color: #333;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             line-height: 1.6;
-            min-height: 100vh;
-            padding: 20px;
+            color: var(--dark);
+            background-color: var(--light);
+            overflow-x: hidden;
         }
-        
+
+        h1, h2, h3, h4, h5 {
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: var(--primary-dark);
+        }
+
         .container {
+            width: 90%;
             max-width: 1200px;
             margin: 0 auto;
+            padding: 0 15px;
         }
-        
+
+        /* Header Styles */
         header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: var(--white);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: var(--shadow);
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo h1 {
+            font-size: 1.8rem;
+            margin: 0;
+            color: var(--white);
+        }
+
+        .logo i {
+            font-size: 2rem;
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        nav a {
+            color: var(--white);
+            text-decoration: none;
+            font-weight: 500;
+            transition: var(--transition);
+            padding: 0.5rem 0;
+            position: relative;
+        }
+
+        nav a:after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: 0;
+            left: 0;
+            background-color: var(--white);
+            transition: var(--transition);
+        }
+
+        nav a:hover:after {
+            width: 100%;
+        }
+
+        .auth-buttons {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .btn {
+            padding: 0.6rem 1.5rem;
+            border-radius: 50px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+            text-decoration: none;
+            display: inline-block;
+            border: none;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 2px solid var(--white);
+            color: var(--white);
+        }
+
+        .btn-outline:hover {
+            background: var(--white);
+            color: var(--primary);
+        }
+
+        .btn-primary {
+            background: var(--secondary);
+            color: var(--white);
+            border: 2px solid var(--secondary);
+        }
+
+        .btn-primary:hover {
+            background: var(--secondary-dark);
+            border-color: var(--secondary-dark);
+        }
+
+        /* Page Sections */
+        .page-section {
+            display: none;
+            padding: 5rem 0;
+            min-height: 70vh;
+        }
+
+        .page-section.active {
+            display: block;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('https://images.unsplash.com/photo-1543339305-7d5e1348acd9?ixlib=rb-4.0.3') no-repeat center center/cover;
+            color: var(--white);
+            padding: 6rem 0;
             text-align: center;
-            padding: 30px 0;
         }
-        
-        header h1 {
-            font-size: 2.8rem;
-            color: #2c3e50;
-            margin-bottom: 10px;
-        }
-        
-        header p {
-            font-size: 1.2rem;
-            color: #7f8c8d;
-            max-width: 700px;
+
+        .hero-content {
+            max-width: 800px;
             margin: 0 auto;
         }
-        
-        .search-section {
-            background: white;
-            border-radius: 12px;
-            padding: 30px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
-            margin-bottom: 40px;
+
+        .hero h2 {
+            font-size: 3rem;
+            margin-bottom: 1.5rem;
+            color: var(--white);
         }
-        
-        .search-form {
+
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+        }
+
+        .hero-buttons {
             display: flex;
-            flex-direction: column;
-            gap: 20px;
+            gap: 1rem;
+            justify-content: center;
         }
-        
-        .input-group {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
+
+        /* About Section */
+        .about-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            align-items: center;
         }
-        
-        .input-group label {
-            font-weight: 600;
-            color: #2c3e50;
+
+        .about-text h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
         }
-        
-        .input-group input {
-            padding: 15px;
-            border: 2px solid #ddd;
-            border-radius: 8px;
-            font-size: 1rem;
-            transition: border-color 0.3s;
+
+        .about-image {
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
         }
-        
-        .input-group input:focus {
-            border-color: #3498db;
+
+        .about-image img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        /* Meal Planner Section */
+        .section-title {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .section-title h2 {
+            font-size: 2.5rem;
+            color: var(--primary-dark);
+            position: relative;
+            display: inline-block;
+            padding-bottom: 10px;
+        }
+
+        .section-title h2:after {
+            content: '';
+            position: absolute;
+            width: 60px;
+            height: 3px;
+            background: var(--secondary);
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .planner-container {
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            gap: 2rem;
+        }
+
+        .filters {
+            background: var(--white);
+            padding: 1.5rem;
+            border-radius: 10px;
+            box-shadow: var(--shadow);
+            height: fit-content;
+        }
+
+        .filter-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .filter-group h3 {
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+            color: var(--primary-dark);
+        }
+
+        .budget-input {
+            width: 100%;
+            padding: 0.8rem;
+            border: 2px solid var(--light-gray);
+            border-radius: 5px;
+            font-size: 1.1rem;
+            margin-bottom: 1rem;
+        }
+
+        .budget-input:focus {
+            border-color: var(--primary);
             outline: none;
         }
-        
-        .input-group input::placeholder {
-            color: #aaa;
+
+        .checkbox-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            max-height: 300px;
+            overflow-y: auto;
+            padding: 5px;
         }
-        
-        button {
-            background: #3498db;
-            color: white;
-            border: none;
-            padding: 15px 25px;
-            border-radius: 8px;
-            font-size: 1.1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: background 0.3s;
+
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
         }
-        
-        button:hover {
-            background: #2980b9;
-        }
-        
-        .recipes-container {
+
+        .meal-plan {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-            gap: 30px;
-            margin-bottom: 50px;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
         }
-        
-        .recipe-card {
-            background: white;
-            border-radius: 12px;
+
+        .day-card {
+            background: var(--white);
+            border-radius: 10px;
             overflow: hidden;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
-            transition: transform 0.3s;
+            box-shadow: var(--shadow);
         }
-        
-        .recipe-card:hover {
-            transform: translateY(-5px);
+
+        .day-header {
+            background: var(--primary);
+            color: var(--white);
+            padding: 1rem;
+            text-align: center;
+            font-weight: bold;
         }
-        
-        .recipe-image {
-            height: 200px;
-            background: linear-gradient(120deg, #a1c4fd 0%, #c2e9fb 100%);
+
+        .meal-content {
+            padding: 1rem;
+        }
+
+        .meal-item {
+            margin-bottom: 1rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--light-gray);
+        }
+
+        .meal-item:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .meal-item h4 {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+        }
+
+        .meal-price {
+            color: var(--primary);
+            font-weight: bold;
+        }
+
+        .meal-image {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 8px;
+            margin-bottom: 0.5rem;
+        }
+
+        .meal-description {
+            font-size: 0.9rem;
+            color: var(--gray);
+            margin-bottom: 0.5rem;
+        }
+
+        .total-cost {
+            background: var(--secondary);
+            color: var(--white);
+            padding: 1rem;
+            text-align: center;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        /* Premium Section */
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .pricing-card {
+            background: var(--white);
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            text-align: center;
+        }
+
+        .pricing-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .pricing-header {
+            background: var(--primary);
+            color: var(--white);
+            padding: 2rem;
+        }
+
+        .pricing-price {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin: 1rem 0;
+        }
+
+        .pricing-duration {
+            font-size: 1rem;
+            opacity: 0.8;
+        }
+
+        .pricing-features {
+            padding: 2rem;
+            list-style: none;
+        }
+
+        .pricing-features li {
+            padding: 0.5rem 0;
+            border-bottom: 1px solid var(--light-gray);
+        }
+
+        .pricing-features li:last-child {
+            border-bottom: none;
+        }
+
+        .pricing-actions {
+            padding: 0 2rem 2rem;
+        }
+
+        .payment-methods {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .payment-method {
+            width: 50px;
+            height: 30px;
+            background: var(--light);
+            border-radius: 5px;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: white;
             font-size: 1.5rem;
         }
-        
-        .recipe-content {
-            padding: 25px;
+
+        /* Contact Section */
+        .contact-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
         }
-        
-        .recipe-title {
-            font-size: 1.4rem;
-            color: #2c3e50;
-            margin-bottom: 15px;
+
+        .contact-form {
+            background: var(--white);
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: var(--shadow);
         }
-        
-        .recipe-ingredients {
-            margin-bottom: 20px;
+
+        .form-group {
+            margin-bottom: 1.5rem;
         }
-        
-        .recipe-ingredients h3 {
-            font-size: 1.1rem;
-            color: #7f8c8d;
-            margin-bottom: 10px;
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
         }
-        
-        .ingredients-list {
-            list-style-type: none;
+
+        .form-control {
+            width: 100%;
+            padding: 0.8rem;
+            border: 2px solid var(--light-gray);
+            border-radius: 5px;
+            font-size: 1rem;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
-        
-        .ingredients-list li {
-            padding: 5px 0;
-            border-bottom: 1px solid #eee;
+
+        .form-control:focus {
+            border-color: var(--primary);
+            outline: none;
+        }
+
+        textarea.form-control {
+            min-height: 150px;
+            resize: vertical;
+        }
+
+        .contact-info {
+            background: var(--white);
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: var(--shadow);
+        }
+
+        .contact-details {
+            list-style: none;
+            margin-top: 1.5rem;
+        }
+
+        .contact-details li {
             display: flex;
             align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
         }
-        
-        .ingredients-list li:before {
-            content: "•";
-            color: #3498db;
-            font-weight: bold;
-            display: inline-block;
-            width: 1em;
-            margin-right: 5px;
+
+        .contact-details i {
+            width: 20px;
+            color: var(--primary);
         }
-        
-        .recipe-instructions {
-            margin-bottom: 20px;
+
+        /* AI Search Section */
+        .ai-search {
+            background: var(--white);
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: var(--shadow);
+            margin-bottom: 2rem;
         }
-        
-        .recipe-instructions h3 {
-            font-size: 1.1rem;
-            color: #7f8c8d;
-            margin-bottom: 10px;
-        }
-        
-        .recipe-meta {
+
+        .search-container {
             display: flex;
-            justify-content: space-between;
-            color: #7f8c8d;
-            font-size: 0.9rem;
-            border-top: 1px solid #eee;
-            padding-top: 15px;
+            gap: 1rem;
+            margin-bottom: 1rem;
         }
-        
+
+        .search-input {
+            flex: 1;
+            padding: 0.8rem;
+            border: 2px solid var(--light-gray);
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+
+        .search-input:focus {
+            border-color: var(--primary);
+            outline: none;
+        }
+
+        .search-results {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .meal-card {
+            background: var(--white);
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+        }
+
+        .meal-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .meal-card-image {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+        }
+
+        .meal-card-content {
+            padding: 1rem;
+        }
+
+        .meal-card-title {
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+            color: var(--primary-dark);
+        }
+
+        .meal-card-price {
+            color: var(--primary);
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+
+        .meal-card-description {
+            font-size: 0.9rem;
+            color: var(--gray);
+            margin-bottom: 1rem;
+        }
+
+        .meal-card-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .meal-tag {
+            background: var(--light);
+            padding: 0.3rem 0.6rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            color: var(--dark);
+        }
+
         .loading {
             text-align: center;
-            padding: 40px;
-            font-size: 1.2rem;
-            color: #7f8c8d;
-            display: none;
+            padding: 2rem;
+            color: var(--gray);
         }
-        
+
         .loading i {
-            animation: spin 1.5s linear infinite;
-            margin-right: 10px;
+            animation: spin 1s linear infinite;
         }
-        
+
         @keyframes spin {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
-        
-        .error-message {
-            background: #ffebee;
-            color: #c62828;
-            padding: 15px;
-            border-radius: 8px;
-            margin: 20px 0;
-            display: none;
-        }
-        
+
+        /* Footer */
         footer {
-            text-align: center;
-            padding: 20px;
-            color: #7f8c8d;
-            font-size: 0.9rem;
-            margin-top: 30px;
+            background: var(--dark);
+            color: var(--white);
+            padding: 3rem 0 1rem;
         }
-        
-        @media (max-width: 768px) {
-            .recipes-container {
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-column h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            position: relative;
+            padding-bottom: 10px;
+            color: var(--white);
+        }
+
+        .footer-column h3:after {
+            content: '';
+            position: absolute;
+            width: 40px;
+            height: 2px;
+            background: var(--secondary);
+            bottom: 0;
+            left: 0;
+        }
+
+        .footer-column ul {
+            list-style: none;
+        }
+
+        .footer-column ul li {
+            margin-bottom: 0.8rem;
+        }
+
+        .footer-column a {
+            color: var(--light-gray);
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .footer-column a:hover {
+            color: var(--secondary);
+            padding-left: 5px;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .social-links a {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            transition: var(--transition);
+        }
+
+        .social-links a:hover {
+            background: var(--secondary);
+            transform: translateY(-3px);
+        }
+
+        .copyright {
+            text-align: center;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            font-size: 0.9rem;
+            color: var(--light-gray);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 968px) {
+            .planner-container {
                 grid-template-columns: 1fr;
             }
             
-            header h1 {
+            .about-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .contact-container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            nav ul {
+                gap: 1rem;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            .hero h2 {
                 font-size: 2.2rem;
             }
+            
+            .hero-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .meal-plan {
+                grid-template-columns: 1fr;
+            }
+            
+            .search-container {
+                flex-direction: column;
+            }
+        }
+
+        /* Animation */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animated {
+            animation: fadeIn 1s ease-out;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <header>
-            <h1>Recipe Recommender</h1>
-            <p>Enter ingredients you have, and we'll recommend delicious recipes you can make!</p>
-        </header>
-        
-        <section class="search-section">
-            <form class="search-form" id="recipe-form">
-                <div class="input-group">
-                    <label for="ingredients">Enter Ingredients (comma separated):</label>
-                    <input type="text" id="ingredients" placeholder="e.g., chicken, tomatoes, onions, garlic" required>
+    <!-- Header -->
+    <header>
+        <div class="container header-content">
+            <div class="logo">
+                <i class="fas fa-utensils"></i>
+                <h1>Kenya Budget Meal Planner</h1>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="#" class="nav-link" data-page="home">Home</a></li>
+                    <li><a href="#" class="nav-link" data-page="about">About</a></li>
+                    <li><a href="#" class="nav-link" data-page="planner">Meal Planner</a></li>
+                    <li><a href="#" class="nav-link" data-page="premium">Premium</a></li>
+                    <li><a href="#" class="nav-link" data-page="contact">Contact</a></li>
+                </ul>
+            </nav>
+            <div class="auth-buttons">
+                <a href="#" class="btn btn-outline">Log In</a>
+                <a href="#" class="btn btn-primary">Sign Up</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Home Page -->
+    <section id="home" class="page-section active">
+        <div class="hero">
+            <div class="container hero-content animated">
+                <h2>Healthy and Delicious Meals Without Breaking the Bank</h2>
+                <p>Plan affordable, healthy meals based on your budget and ingredients. Perfect for Kenyan families looking to eat well while saving money.</p>
+                <div class="hero-buttons">
+                    <a href="#" class="btn btn-primary" data-page="planner">Start Planning</a>
+                    <a href="#" class="btn btn-outline" data-page="about">Learn More</a>
                 </div>
-                <button type="submit">Find Recipes</button>
-            </form>
-        </section>
-        
-        <div class="error-message" id="error-message">
-            <i class="fas fa-exclamation-circle"></i>
-            <span id="error-text"></span>
+            </div>
         </div>
-        
-        <div class="loading" id="loading">
-            <i class="fas fa-spinner"></i> Finding the best recipes for you...
+    </section>
+
+    <!-- About Page -->
+    <section id="about" class="page-section">
+        <div class="container">
+            <div class="about-content">
+                <div class="about-text">
+                    <h2>About Kenya Budget Meal Planner</h2>
+                    <p>Kenya Budget Meal Planner helps you enjoy healthy meals at an affordable cost. We focus on Kenyan dishes, nutritional value, and budget-friendly planning for individuals and families.</p>
+                    <p>Our platform makes it easy to plan your weekly meals based on your available ingredients and budget constraints. We provide delicious, nutritious meal suggestions that won't break the bank.</p>
+                    <a href="#" class="btn btn-primary" data-page="planner">Start Meal Planning</a>
+                </div>
+                <div class="about-image">
+                    <img src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?ixlib=rb-4.0.3" alt="Family enjoying a meal">
+                </div>
+            </div>
         </div>
-        
-        <div class="recipes-container" id="recipes-container">
-            <!-- Recipe cards will be generated here -->
+    </section>
+
+    <!-- Meal Planner Page -->
+    <section id="planner" class="page-section">
+        <div class="container">
+            <div class="section-title">
+                <h2>Weekly Meal Planner</h2>
+                <p>Create your personalized meal plan based on your budget and available ingredients</p>
+            </div>
+            
+            <!-- AI Search Section -->
+            <div class="ai-search">
+                <h3>AI-Powered Meal Search</h3>
+                <p>Describe what you're looking for (ingredients, dietary needs, budget)</p>
+                <div class="search-container">
+                    <input type="text" class="search-input" id="ai-search-input" placeholder="E.g. Vegetarian meals with beans and rice under KSh 100">
+                    <button class="btn btn-primary" id="ai-search-btn">
+                        <i class="fas fa-search"></i> Search
+                    </button>
+                </div>
+                <div id="search-results" class="search-results">
+                    <!-- AI search results will appear here -->
+                </div>
+            </div>
+            
+            <div class="planner-container">
+                <div class="filters">
+                    <h2>Your Preferences</h2>
+                    <div class="filter-group">
+                        <h3>Weekly Budget (KSh)</h3>
+                        <input type="number" class="budget-input" id="budget-input" placeholder="2000" min="500" step="100">
+                    </div>
+                    <div class="filter-group">
+                        <h3>Available Ingredients</h3>
+                        <div class="checkbox-list">
+                            <label class="checkbox-item">
+                                <input type="checkbox" checked> Maize
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox" checked> Beans
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox" checked> Sukuma Wiki
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox" checked> Eggs
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox"> Rice
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox"> Lentils
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox"> Sweet Potatoes
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox"> Chapati Flour
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox"> Omena
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox"> Chicken
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox"> Beef
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox"> Tomatoes
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox"> Onions
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox"> Carrots
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox"> Cabbage
+                            </label>
+                        </div>
+                    </div>
+                    <button class="btn btn-primary" style="width: 100%;" id="generate-plan">Generate Meal Plan</button>
+                    <button class="btn btn-outline" style="width: 100%; margin-top: 10px;">Download as PDF</button>
+                </div>
+                <div class="meal-plan" id="meal-plan-container">
+                    <div class="day-card">
+                        <div class="day-header">Monday</div>
+                        <div class="meal-content">
+                            <div class="meal-item">
+                                <h4>Breakfast <span class="meal-price">KSh 80</span></h4>
+                                <img src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?ixlib=rb-4.0.3" alt="Kenyan Breakfast" class="meal-image">
+                                <div class="meal-description">Mandazi with Kenyan tea</div>
+                            </div>
+                            <div class="meal-item">
+                                <h4>Lunch <span class="meal-price">KSh 150</span></h4>
+                                <img src="https://images.unsplash.com/photo-1596461404969-9ae70f2830c1?ixlib=rb-4.0.3" alt="Githeri" class="meal-image">
+                                <div class="meal-description">Githeri with avocado</div>
+                            </div>
+                            <div class="meal-item">
+                                <h4>Dinner <span class="meal-price">KSh 120</span></h4>
+                                <img src="https://images.unsplash.com/photo-1663534648785-3a0d7a872b38?ixlib=rb-4.0.3" alt="Ugali Sukuma" class="meal-image">
+                                <div class="meal-description">Ugali with sukuma wiki and omena</div>
+                            </div>
+                        </div>
+                        <div class="total-cost">Total: KSh 350</div>
+                    </div>
+                    <div class="day-card">
+                        <div class="day-header">Tuesday</div>
+                        <div class="meal-content">
+                            <div class="meal-item">
+                                <h4>Breakfast <span class="meal-price">KSh 70</span></h4>
+                                <img src="https://images.unsplash.com/photo-1525351484163-7529414344d8?ixlib=rb-4.0.3" alt="Porridge" class="meal-image">
+                                <div class="meal-description">Uji (porridge) with peanuts</div>
+                            </div>
+                            <div class="meal-item">
+                                <h4>Lunch <span class="meal-price">KSh 130</span></h4>
+                                <img src="https://images.unsplash.com/photo-1512058564366-18510be2db19?ixlib=rb-4.0.3" alt="Bean Stew" class="meal-image">
+                                <div class="meal-description">Rice with bean stew</div>
+                            </div>
+                            <div class="meal-item">
+                                <h4>Dinner <span class="meal-price">KSh 180</span></h4>
+                                <img src="https://images.unsplash.com/photo-1630918037678-a8f7e0fbd4e5?ixlib=rb-4.0.3" alt="Chapati" class="meal-image">
+                                <div class="meal-description">Chapati with potato stew</div>
+                            </div>
+                        </div>
+                        <div class="total-cost">Total: KSh 380</div>
+                    </div>
+                    <div class="day-card">
+                        <div class="day-header">Wednesday</div>
+                        <div class="meal-content">
+                            <div class="meal-item">
+                                <h4>Breakfast <span class="meal-price">KSh 90</span></h4>
+                                <img src="https://images.unsplash.com/photo-1551782450-a2132b4ba21d?ixlib=rb-4.0.3" alt="Eggs" class="meal-image">
+                                <div class="meal-description">Eggs with avocado and bread</div>
+                            </div>
+                            <div class="meal-item">
+                                <h4>Lunch <span class="meal-price">KSh 110</span></h4>
+                                <img src="https://images.unsplash.com/photo-1565299585323-38174c739b6c?ixlib=rb-4.0.3" alt="Lentils" class="meal-image">
+                                <div class="meal-description">Ugali with ndengu (lentils)</div>
+                            </div>
+                            <div class="meal-item">
+                                <h4>Dinner <span class="meal-price">KSh 160</span></h4>
+                                <img src="https://images.unsplash.com/photo-1546833999-b9f581a1996d?ixlib=rb-4.0.3" alt="Chicken" class="meal-image">
+                                <div class="meal-description">Mukimo with chicken stew</div>
+                            </div>
+                        </div>
+                        <div class="total-cost">Total: KSh 360</div>
+                    </div>
+                </div>
+            </div>
         </div>
-        
-        <footer>
-            <p>Recipe Recommender &copy; 2023 | Powered by OpenAI API</p>
-        </footer>
-    </div>
+    </section>
+
+    <!-- Premium Page -->
+    <section id="premium" class="page-section">
+        <div class="container">
+            <div class="section-title">
+                <h2>Premium Access</h2>
+                <p>Upgrade to unlock exclusive features for better meal planning</p>
+            </div>
+            <div class="pricing-grid">
+                <div class="pricing-card animated">
+                    <div class="pricing-header">
+                        <h3>Weekly Plan</h3>
+                        <div class="pricing-price">KSh 200</div>
+                        <div class="pricing-duration">per week</div>
+                    </div>
+                    <ul class="pricing-features">
+                        <li>Custom meal plans based on dietary needs</li>
+                        <li>Shopping list generator</li>
+                        <li>Nutritional information</li>
+                        <li>Ad-free experience</li>
+                        <li>AI-powered meal recommendations</li>
+                    </ul>
+                    <div class="pricing-actions">
+                        <button class="btn btn-primary">Subscribe Now</button>
+                        <div class="payment-methods">
+                            <div class="payment-method">
+                                <i class="fas fa-mobile-alt" title="M-Pesa"></i>
+                            </div>
+                            <div class="payment-method">
+                                <i class="fas fa-credit-card" title="Card"></i>
+                            </div>
+                            <div class="payment-method">
+                                <i class="fab fa-paypal" title="PayPal"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="pricing-card animated">
+                    <div class="pricing-header">
+                        <h3>Monthly Plan</h3>
+                        <div class="pricing-price">KSh 500</div>
+                        <div class="pricing-duration">per month</div>
+                    </div>
+                    <ul class="pricing-features">
+                        <li>Everything in Weekly Plan</li>
+                        <li>Priority support</li>
+                        <li>Meal prep guides</li>
+                        <li>Budget tracking tools</li>
+                        <li>Advanced AI meal planning</li>
+                        <li>Save 38% compared to weekly</li>
+                    </ul>
+                    <div class="pricing-actions">
+                        <button class="btn btn-primary">Subscribe Now</button>
+                        <div class="payment-methods">
+                            <div class="payment-method">
+                                <i class="fas fa-mobile-alt" title="M-Pesa"></i>
+                            </div>
+                            <div class="payment-method">
+                                <i class="fas fa-credit-card" title="Card"></i>
+                            </div>
+                            <div class="payment-method">
+                                <i class="fab fa-paypal" title="PayPal"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Page -->
+    <section id="contact" class="page-section">
+        <div class="container">
+            <div class="section-title">
+                <h2>Contact Us</h2>
+                <p>Get in touch with us for any questions or support</p>
+            </div>
+            <div class="contact-container">
+                <div class="contact-form">
+                    <h3>Send us a Message</h3>
+                    <form id="contactForm">
+                        <div class="form-group">
+                            <label for="name">Your Name</label>
+                            <input type="text" id="name" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email Address</label>
+                            <input type="email" id="email" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="message">Your Message</label>
+                            <textarea id="message" class="form-control" required></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Send Message</button>
+                    </form>
+                </div>
+                <div class="contact-info">
+                    <h3>Contact Information</h3>
+                    <p>Feel free to reach out to us through any of the following channels:</p>
+                    <ul class="contact-details">
+                        <li>
+                            <i class="fas fa-envelope"></i>
+                            <span>info@kenyamealplanner.com</span>
+                        </li>
+                        <li>
+                            <i class="fas fa-phone"></i>
+                            <span>+254 700 123 456</span>
+                        </li>
+                        <li>
+                            <i class="fas fa-map-marker-alt"></i>
+                            <span>Nairobi, Kenya</span>
+                        </li>
+                    </ul>
+                    <div class="map" style="height: 200px; background: #eee; border-radius: 8px; display: flex; align-items: center; justify-content: center; margin-top: 20px;">
+                        <p>Google Maps Location (Nairobi, Kenya)</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3>Kenya Budget Meal Planner</h3>
+                    <p>Helping Kenyan families eat healthy while saving money.</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-whatsapp"></i></a>
+                    </div>
+                </div>
+                <div class="footer-column">
+                    <h3>Quick Links</h3>
+                    <ul>
+                        <li><a href="#" class="nav-link" data-page="home">Home</a></li>
+                        <li><a href="#" class="nav-link" data-page="about">About</a></li>
+                        <li><a href="#" class="nav-link" data-page="planner">Meal Planner</a></li>
+                        <li><a href="#" class="nav-link" data-page="premium">Premium</a></li>
+                        <li><a href="#" class="nav-link" data-page="contact">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Resources</h3>
+                    <ul>
+                        <li><a href="#">Cooking Tips</a></li>
+                        <li><a href="#">Nutrition Guide</a></li>
+                        <li><a href="#">Budget Shopping</a></li>
+                        <li><a href="#">Kenyan Recipes</a></li>
+                        <li><a href="#">AI Meal Finder</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Contact Us</h3>
+                    <ul>
+                        <li><i class="fas fa-envelope"></i> info@kenyamealplanner.com</li>
+                        <li><i class="fas fa-phone"></i> +254 700 123 456</li>
+                        <li><i class="fas fa-map-marker-alt"></i> Nairobi, Kenya</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>&copy; 2023 Kenya Budget Meal Planner. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const recipeForm = document.getElementById('recipe-form');
-            const recipesContainer = document.getElementById('recipes-container');
-            const loadingElement = document.getElementById('loading');
-            const errorElement = document.getElementById('error-message');
-            const errorText = document.getElementById('error-text');
-            
-            // Sample recipe data for demonstration
-            const sampleRecipes = [
-                {
-                    title: "Classic Chicken Tomato Pasta",
-                    ingredients: ["chicken", "tomatoes", "pasta", "garlic", "olive oil", "basil"],
-                    instructions: "1. Cook pasta according to package instructions. 2. Season chicken and cook until golden. 3. Add chopped tomatoes and garlic, simmer for 10 minutes. 4. Toss with pasta and garnish with basil.",
-                    cookingTime: "25 min",
-                    difficulty: "Easy"
-                },
-                {
-                    title: "Fresh Tomato Salad",
-                    ingredients: ["tomatoes", "onions", "olive oil", "vinegar", "salt", "pepper"],
-                    instructions: "1. Slice tomatoes and onions. 2. Arrange on a plate. 3. Drizzle with olive oil and vinegar. 4. Season with salt and pepper to taste.",
-                    cookingTime: "10 min",
-                    difficulty: "Very Easy"
-                },
-                {
-                    title: "Garlic Herb Chicken",
-                    ingredients: ["chicken", "garlic", "herbs", "lemon juice", "olive oil"],
-                    instructions: "1. Marinate chicken with garlic, herbs, lemon juice, and olive oil for 30 minutes. 2. Grill chicken until cooked through. 3. Serve with your favorite side dish.",
-                    cookingTime: "40 min",
-                    difficulty: "Medium"
-                }
-            ];
-            
-            // Function to display recipes
-            function displayRecipes(recipes) {
-                recipesContainer.innerHTML = '';
+        // Navigation functionality
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const targetPage = this.getAttribute('data-page');
                 
-                recipes.forEach(recipe => {
-                    const recipeCard = document.createElement('div');
-                    recipeCard.className = 'recipe-card';
-                    
-                    const ingredientsList = recipe.ingredients.map(ingredient => 
-                        `<li>${ingredient}</li>`
-                    ).join('');
-                    
-                    recipeCard.innerHTML = `
-                        <div class="recipe-image">
-                            <i class="fas fa-utensils"></i>
-                        </div>
-                        <div class="recipe-content">
-                            <h2 class="recipe-title">${recipe.title}</h2>
-                            <div class="recipe-ingredients">
-                                <h3>Ingredients</h3>
-                                <ul class="ingredients-list">
-                                    ${ingredientsList}
-                                </ul>
-                            </div>
-                            <div class="recipe-instructions">
-                                <h3>Instructions</h3>
-                                <p>${recipe.instructions}</p>
-                            </div>
-                            <div class="recipe-meta">
-                                <span><i class="far fa-clock"></i> ${recipe.cookingTime}</span>
-                                <span>Difficulty: ${recipe.difficulty}</span>
-                            </div>
-                        </div>
-                    `;
-                    
-                    recipesContainer.appendChild(recipeCard);
+                // Hide all pages
+                document.querySelectorAll('.page-section').forEach(section => {
+                    section.classList.remove('active');
                 });
+                
+                // Show target page
+                document.getElementById(targetPage).classList.add('active');
+                
+                // Scroll to top
+                window.scrollTo(0, 0);
+            });
+        });
+
+        // Budget input functionality
+        const budgetInput = document.getElementById('budget-input');
+        
+        budgetInput.addEventListener('change', function() {
+            if (this.value < 500) {
+                this.value = 500;
+                alert("Minimum budget is KSh 500 for a week of meals");
+            }
+        });
+
+        // Contact form submission
+        document.getElementById('contactForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            alert('Thank you for your message! We will get back to you soon.');
+            this.reset();
+        });
+
+        // Simple animation on scroll
+        document.addEventListener('DOMContentLoaded', function() {
+            const animatedElements = document.querySelectorAll('.animated');
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = 1;
+                    }
+                });
+            }, { threshold: 0.1 });
+            
+            animatedElements.forEach(element => {
+                element.style.opacity = 0;
+                element.style.transition = 'opacity 0.5s ease-in-out';
+                observer.observe(element);
+            });
+        });
+
+        // AI Search Functionality
+        document.getElementById('ai-search-btn').addEventListener('click', function() {
+            const searchQuery = document.getElementById('ai-search-input').value.trim();
+            
+            if (!searchQuery) {
+                alert('Please enter a search query');
+                return;
             }
             
-            // Show sample recipes on page load
-            displayRecipes(sampleRecipes);
+            // Show loading state
+            const resultsContainer = document.getElementById('search-results');
+            resultsContainer.innerHTML = `
+                <div class="loading">
+                    <i class="fas fa-spinner"></i>
+                    <p>Searching for meals...</p>
+                </div>
+            `;
             
-            // Handle form submission
-            recipeForm.addEventListener('submit', function(e) {
-                e.preventDefault();
+            // Simulate API call (replace with actual API integration)
+            setTimeout(() => {
+                // This is a mock response - in a real app, you would call an AI API
+                const mockResults = [
+                    {
+                        name: "Bean and Maize Githeri",
+                        price: 120,
+                        image: "https://images.unsplash.com/photo-1596461404969-9ae70f2830c1",
+                        description: "Traditional Kenyan dish with beans and maize, cooked with tomatoes and onions.",
+                        tags: ["Vegetarian", "High Protein", "Budget"]
+                    },
+                    {
+                        name: "Sukuma Wiki with Ugali",
+                        price: 100,
+                        image: "https://images.unsplash.com/photo-1663534648785-3a0d7a872b38",
+                        description: "Classic Kenyan combination of collard greens and maize flour porridge.",
+                        tags: ["Vegetarian", "Gluten-Free", "Traditional"]
+                    },
+                    {
+                        name: "Chapati with Bean Stew",
+                        price: 150,
+                        image: "https://images.unsplash.com/photo-1630918037678-a8f7e0fbd4e5",
+                        description: "Soft flatbread served with a flavorful bean stew.",
+                        tags: ["Vegetarian", "High Fiber", "Comfort Food"]
+                    },
+                    {
+                        name: "Kenyan Lentil Curry",
+                        price: 130,
+                        image: "https://images.unsplash.com/photo-1565299585323-38174c739b6c",
+                        description: "Spiced lentils cooked in coconut milk with Kenyan spices.",
+                        tags: ["Vegetarian", "Dairy-Free", "Protein Rich"]
+                    }
+                ];
                 
-                const ingredientsInput = document.getElementById('ingredients').value;
-                
-                if (ingredientsInput.trim() === '') {
-                    showError('Please enter at least one ingredient');
-                    return;
-                }
-                
-                // Clear any previous errors
-                hideError();
-                
-                // Show loading state
-                loadingElement.style.display = 'block';
-                recipesContainer.innerHTML = '';
-                
-                // Simulate API call delay
-                setTimeout(() => {
-                    // In a real application, this would be an API call to the backend
-                    // For demonstration, we're using sample data
-                    
-                    // Hide loading state
-                    loadingElement.style.display = 'none';
-                    
-                    // Display recipes based on input (in a real app, this would come from the API)
-                    displayRecipes(sampleRecipes);
-                    
-                    // Scroll to results
-                    recipesContainer.scrollIntoView({ behavior: 'smooth' });
-                    
-                }, 1500);
+                displaySearchResults(mockResults);
+            }, 1500);
+        });
+        
+        // Function to display search results
+        function displaySearchResults(results) {
+            const resultsContainer = document.getElementById('search-results');
+            
+            if (results.length === 0) {
+                resultsContainer.innerHTML = '<p class="loading">No meals found matching your criteria. Try different ingredients.</p>';
+                return;
+            }
+            
+            let html = '';
+            
+            results.forEach(meal => {
+                html += `
+                    <div class="meal-card">
+                        <img src="${meal.image}?ixlib=rb-4.0.3" alt="${meal.name}" class="meal-card-image">
+                        <div class="meal-card-content">
+                            <h3 class="meal-card-title">${meal.name}</h3>
+                            <div class="meal-card-price">KSh ${meal.price}</div>
+                            <p class="meal-card-description">${meal.description}</p>
+                            <div class="meal-card-tags">
+                                ${meal.tags.map(tag => `<span class="meal-tag">${tag}</span>`).join('')}
+                            </div>
+                            <button class="btn btn-primary" style="width: 100%; margin-top: 1rem;">Add to Meal Plan</button>
+                        </div>
+                    </div>
+                `;
             });
             
-            // Error handling functions
-            function showError(message) {
-                errorText.textContent = message;
-                errorElement.style.display = 'block';
+            resultsContainer.innerHTML = html;
+        }
+        
+        // Generate meal plan based on filters
+        document.getElementById('generate-plan').addEventListener('click', function() {
+            const budget = document.getElementById('budget-input').value;
+            const selectedIngredients = Array.from(document.querySelectorAll('.checkbox-item input:checked'))
+                .map(checkbox => checkbox.parentElement.textContent.trim());
+                
+            if (!budget || budget < 500) {
+                alert('Please set a valid budget (minimum KSh 500)');
+                return;
             }
             
-            function hideError() {
-                errorElement.style.display = 'none';
-            }
+            // Show loading state
+            const mealPlanContainer = document.getElementById('meal-plan-container');
+            mealPlanContainer.innerHTML = `
+                <div class="loading" style="grid-column: 1 / -1;">
+                    <i class="fas fa-spinner"></i>
+                    <p>Generating your personalized meal plan...</p>
+                </div>
+            `;
             
-            // Simulate a potential GitHub Pages error for demonstration
+            // Simulate AI meal planning (replace with actual API call)
             setTimeout(() => {
-                // This is just to show the error message element
-                // showError('If you see this on GitHub Pages, check your repository settings and ensure your file is named index.html');
-            }, 3000);
+                // This would be replaced with actual AI-generated meal plan
+                alert(`Meal plan generated based on KSh ${budget} budget and ingredients: ${selectedIngredients.join(', ')}`);
+                
+                // Reload the default meal plan for demonstration
+                location.reload();
+            }, 2000);
         });
     </script>
 </body>
 </html>
+
